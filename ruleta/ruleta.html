@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ruleta de premios</title>
+
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+          /* Agregar la URL de tu imagen de fondo */
+          background-image: url('https://luizcore.files.wordpress.com/2011/12/sexy-christmas-7.jpg?w=736&h=458');
+      /* Establecer propiedades del fondo */
+      background-size: cover; /* Ajusta la imagen para cubrir todo el fondo */
+      background-position: center; /* Centra la imagen */
+      /* Opcional: otros estilos */
+      /* background-color: #f0f0f0; */ /* Color de fondo como respaldo */
+      /* font-family: Arial, sans-serif; */ /* Cambia la fuente si es necesario */
+    }
+    .container {
+      display: flex;
+      align-items: center;
+    }
+    #roulette {
+      width: 400px;
+      height: 400px;
+      border: 5px solid #f1c40f;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+      margin-right: 20px;
+    }
+    #spinner {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform-origin: 50% 50%;
+    }
+    .number {
+      position: absolute;
+      font-size: 12px;
+      color: #f1c40f;
+      transform-origin: 50% 100%;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="roulette">
+      <img id="spinner" src="https://via.placeholder.com/400" alt="Ruleta de premios">
+      <!-- Números -->
+      <!-- Aquí puedes colocar los números -->
+    </div>
+    
+    <div>
+      <div id="additionalNumbers">
+        <h3>Agregar números</h3>
+        <!-- Formulario para agregar números -->
+        <input type="number" id="newNumber" placeholder="Nuevo número">
+        <button onclick="addNumber()">Agregar</button>
+      </div>
+
+      <div id="winningNumbers">
+        <h3>Números ganadores</h3>
+        <ul id="winningList"></ul>
+      </div>
+    </div>
+  </div>
+
+  <button onclick="spin()">Girar</button>
+
+  <script>
+    const winningNumbers = new Set();
+    const roulette = document.getElementById('roulette');
+    
+    function spin() {
+      const randomNumber = Math.floor(Math.random() * 100) + 1;
+      const degrees = 360 * 5 + (360 / 100) * randomNumber;
+      const spinner = document.getElementById('spinner');
+      spinner.style.transform = `rotate(${degrees}deg)`;
+
+      setTimeout(() => {
+        alert(`¡Has ganado el premio número ${randomNumber}!`);
+        spinner.style.transform = 'none';
+        winningNumbers.add(randomNumber);
+        updateWinningNumbers(randomNumber);
+      }, 5000);
+    }
+
+    function addNumber() {
+      const newNumber = parseInt(document.getElementById('newNumber').value);
+      if (!isNaN(newNumber) && newNumber >= 1 && newNumber <= 100) {
+        addNumberToRoulette(newNumber);
+        document.getElementById('newNumber').value = '';
+      } else {
+        alert('Ingresa un número válido entre 1 y 100.');
+      }
+    }
+
+    function addNumberToRoulette(number) {
+      const newDiv = document.createElement('div');
+      newDiv.classList.add('number');
+      newDiv.textContent = number;
+      const angle = (360 / 100) * number;
+      newDiv.style.transform = `rotate(${angle}deg) translate(-50%, -50%)`;
+      roulette.appendChild(newDiv);
+    }
+
+    function updateWinningNumbers(newNumber) {
+      const winningList = document.getElementById('winningList');
+      const li = document.createElement('li');
+      li.textContent = newNumber;
+      winningList.appendChild(li);
+    }
+  </script>
+</body>
+</html>
